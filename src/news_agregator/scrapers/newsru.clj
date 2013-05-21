@@ -1,6 +1,6 @@
-(ns parse-enlive-html.scrapers.newsru
+(ns news_agregator.scrapers.newsru
   (:require [net.cgrand.enlive-html :as html]
-            [parse-enlive-html.utils :as utils]))
+            [news_agregator.utils :as utils]))
 
 ; "http://hitech.newsru.com"
 

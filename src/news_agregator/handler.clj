@@ -1,13 +1,13 @@
 (ns news_agregator.handler
-  (:require [compojure.core :refere :all]
+  (:require [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
             (news_agregator [utils :as utils]
                             [model :as model])
             (news_agregator.scrapers [newsru :as newsru]
-                                        [inopressa :as inopressa]
-                                        [hi-news :as hi-news])
-            [overtone.at-at :as at-at])))
+                                     [inopressa :as inopressa]
+                                     [hi-news :as hi-news])
+            [overtone.at-at :as at-at]))
 
 (def site-info (list {:address "http://hi-news.ru"
                       :article-type :it

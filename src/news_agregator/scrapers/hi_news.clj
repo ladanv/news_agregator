@@ -1,6 +1,6 @@
-(ns parse-enlive-html.scrapers.hi-news
+(ns news_agregator.scrapers.hi-news
   (:require [net.cgrand.enlive-html :as html]
-            [parse-enlive-html.utils :as utils]))
+            [news_agregator.utils :as utils]))
 
 ; hi-news.ru
 

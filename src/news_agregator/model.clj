@@ -1,4 +1,4 @@
-(ns parse-enlive-html.model
+(ns news_agregator.model
   (:use [korma db core]))
 
 (def default-conn {:classname "com.postgresql.jdbc.Driver"

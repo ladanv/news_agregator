@@ -1,6 +1,6 @@
-(ns parse-enlive-html.scrapers.inopressa
+(ns news_agregator.scrapers.inopressa
   (:require [net.cgrand.enlive-html :as html]
-            [parse-enlive-html.utils :as utils]))
+            [news_agregator.utils :as utils]))
 
 ; "http://www.inopressa.ru/rubrics/different"
 

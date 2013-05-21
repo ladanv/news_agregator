@@ -1,4 +1,4 @@
-(ns parse-enlive-html.utils
+(ns news_agregator.utils
   (:require [net.cgrand.enlive-html :as html]
             [clojure.string :as str])
   (:import [java.lang.String]))
