@@ -2,6 +2,8 @@
   (:require [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
+            [net.cgrand.enlive-html :as html]
+            [ring.util.response :as resp]
             (news_agregator [utils :as utils]
                             [model :as model])
             (news_agregator.scrapers [newsru :as newsru]
@@ -56,16 +58,21 @@
                          (* 60)
                          (* 15))) ; 15 minutes
 
-(defn main-fn []
+(defn run-articles-fetching []
   (at-at/every fetching-period get-new-articles my-pool :fixed-delay true))
 
 ;; (at-at/show-schedule my-pool)
 ;; (at-at/stop-and-reset-pool! my-pool :strategy :kill)
 
+(def index (html/html-resource "public/html/main.html"))
+
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/" [] (resp/redirect "/articles"))
+  (GET "/articles" [] (html/emit* index))
+  (GET "/articles/:type" [type] (str "Articles types " type))
   (route/resources "/")
   (route/not-found "Not Found"))
 
 (def app
+  ;; (run-articles-fetching)
   (handler/site app-routes))
