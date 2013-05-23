@@ -5,7 +5,8 @@
             [net.cgrand.enlive-html :as html]
             [ring.util.response :as resp]
             (news_agregator [utils :as utils]
-                            [model :as model])
+                            [model :as model]
+                            [view  :as view])
             (news_agregator.scrapers [newsru :as newsru]
                                      [inopressa :as inopressa]
                                      [hi-news :as hi-news])
@@ -64,11 +65,9 @@
 ;; (at-at/show-schedule my-pool)
 ;; (at-at/stop-and-reset-pool! my-pool :strategy :kill)
 
-(def index (html/html-resource "public/html/main.html"))
-
 (defroutes app-routes
   (GET "/" [] (resp/redirect "/articles"))
-  (GET "/articles" [] (html/emit* index))
+  (GET "/articles" [] (view/layout))
   (GET "/articles/:type" [type] (str "Articles types " type))
   (route/resources "/")
   (route/not-found "Not Found"))
