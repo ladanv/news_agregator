@@ -12,14 +12,27 @@
                      :user "user"
                      :password "yes"}))
 
-; article_types
-
-(defentity article_types)
-
 ; articles
 
-(defentity articles
-  (belongs-to article_types))
+(defentity articles)
+
+(defn get-articles
+  ([] 
+     (select articles))
+  ([article-type]
+       (select articles
+               (where {:type article-type})))
+  ([limit-num offset-num]
+     (select articles
+             (limit limit-num)
+             (offset offset-num)))
+  ([article-type limit-num offset-num]
+     (select articles
+             (where {:type article-type})
+             (limit limit-num)
+             (offset offset-num))))
+
+(first (get-articles "all"))
 
 (defn find-article-by-hashcode [hashcode]
   (select articles
@@ -33,3 +46,8 @@
 
 (defn add-article [article]
  (insert articles (values article)))
+
+
+
+
+

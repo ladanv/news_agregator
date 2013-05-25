@@ -38,7 +38,7 @@
 {
     margin-left: 200px;
     border-left: 1px solid gray;
-    padding: 1em;
+    padding: .1em 1em;
 }
 
 /* #content h2 */
@@ -55,4 +55,11 @@
     background-color: #ddd;
     border-top: 1px solid gray;
     text-align: center;
+}
+
+.paging
+{
+    margin-left: 200px;
+    border-left: 1px solid gray;
+    padding: .1em 1em;
 }

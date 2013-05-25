@@ -19,26 +19,27 @@
         (str/trim (subs s (+ pos 1) (count s)))
       s)))
 
-(defn article-type-to-int [t]
-  (cond
-   (= :it t) 1
-   (= :different t) 2
-   (= :economics t) 3
-   (= :sport t) 4))
+;; (defn article-type-to-int [t]
+;;   (let [type (keyword t)]
+;;     (cond
+;;      (= :all type) 0
+;;      (= :it type) 1
+;;      (= :different type) 2
+;;      (= :economics type) 3
+;;      (= :sport type) 4)))
 
 (defn get-articles [info]
   (let [site-address (:address info)
-        article-type (:article-type info)
+        article-type (:type info)
         scrape-fn    (:scrape-fn info)
         extract-fn   (:extract-fn info)
         process-node (fn [node]
                        (-> node
                            extract-fn
-                           (assoc :article_types_id (article-type-to-int article-type))))]
+                           (assoc :type article-type)))]
     (map process-node (scrape-fn site-address))))
 
 (defn add-hashcode [article]
   (assoc article :hashcode (->> article
                                 :link
-                                hash
-                                )))
+                                hash)))
