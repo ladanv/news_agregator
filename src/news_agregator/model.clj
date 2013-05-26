@@ -16,6 +16,8 @@
 
 (defentity articles)
 
+;; TODO parameters must be a hash-map
+;; {:article-type article-type :limit-num limit-num :offset-num offsen-num}
 (defn get-articles
   ([] 
      (select articles))

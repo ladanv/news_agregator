@@ -15,7 +15,6 @@
 ;; article types
 
 (def it "it")
-(def politics "politics")
 (def economics "economics")
 (def different "different")
 (def sport "sport")
@@ -41,23 +40,13 @@
                       :scrape-fn inopressa/scrape-articles
                       :extract-fn inopressa/extract-article}))
 
-(def menu-items [{:text "Информационные технологии" :href "/articles/it"}
-                 {:text "Политика" :href "/articles/politics"}
-                 {:text "Экономика" :href "/articles/economics"}
-                 {:text "Спорт" :href "/articles/sport"}
-                 {:text "Разное" :href "/articles/different"}
-                 {:text "Все" :href "/articles/all"}])
+(def menu-items [{:text "Информационные технологии" :href "/articles/it/1"}
+                 {:text "Экономика" :href "/articles/economics/1"}
+                 {:text "Спорт" :href "/articles/sport/1"}
+                 {:text "Разное" :href "/articles/different/1"}
+                 {:text "Все" :href "/articles/all/1"}])
 
 ; ***************** print *****************
-
-(defn print-article [article]
-  (model/add-article article)
-  (println "\n---------------------------------")
-  (println "\t" (article :link))
-  (println "\t" (article :headline))
-  (println "\t" (article :summary))
-  (println "\t" (article :hashcode))
-  (println "\t" (article :article_types_id)))
 
 (defn get-new-articles []
   (doseq [info site-info]
@@ -65,7 +54,7 @@
       (let [new-article (utils/add-hashcode article)]
         (if-not (model/article-exists? new-article)
           (model/add-article new-article)
-          ;(print-article new-article)
+          ;(utils/print-article new-article)
           )))))
 
 (def my-pool (at-at/mk-pool))
@@ -82,14 +71,22 @@
 ;; (at-at/show-schedule my-pool)
 ;; (at-at/stop-and-reset-pool! my-pool :strategy :kill)
 
-(defn layout-page [type limit offset]
-  (if (= type "all")
-    (view/layout menu-items (model/get-articles limit offset))
-    (view/layout menu-items (model/get-articles type limit offset))))
+(def articles-per-page 10)
+
+(defn calc-offset [page-num limit]
+  (let [page (- page-num 1)]
+      (* page limit)))
+
+(defn layout-page [articles-type page-num]
+  (let [limit  articles-per-page
+        offset (calc-offset (Integer. page-num) limit)]
+        (if (= articles-type "all")
+          (view/layout articles-type menu-items (model/get-articles limit offset))
+          (view/layout articles-type menu-items (model/get-articles articles-type limit offset)))))
 
 (defroutes app-routes
-  (GET "/" [] (resp/redirect "/articles/all"))
-  (GET "/articles/:type" [type] (layout-page type 10 0))
+  (GET "/" [] (resp/redirect "/articles/all/1"))
+  (GET "/articles/:type/:page" [type page] (layout-page type page))
   (route/resources "/")
   (route/not-found "Not Found"))
 

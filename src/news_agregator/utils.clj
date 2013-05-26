@@ -43,3 +43,12 @@
   (assoc article :hashcode (->> article
                                 :link
                                 hash)))
+
+;; (defn print-article [article]
+;;   (model/add-article article)
+;;   (println "\n---------------------------------")
+;;   (println "\t" (article :link))
+;;   (println "\t" (article :headline))
+;;   (println "\t" (article :summary))
+;;   (println "\t" (article :hashcode))
+;;   (println "\t" (article :article_types_id)))
