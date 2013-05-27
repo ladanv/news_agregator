@@ -38,14 +38,14 @@
 
  ;; TODO stoped here
 (defsnippet pager-snip pager-html [:.pager]
-  [article-type curr-page count limit] 
-  [:.prev-page] (do->
-                 (if (= curr-page 1)))
-  [:.next-page] ()
-  [:.page-link] (clone-for [page (range )]
+  [link-href curr-page count limit] 
+  ;; [:.prev-page] (do->
+  ;;                (if (= curr-page 1)))
+  ;; [:.next-page] ()
+  [:.page-link] (clone-for [page (range count)]
                            [:a] (do->
                                  (content (str page))
-                                 (set-attr :href (str "/articles/" article-type "/" page)))))
+                                 (set-attr :href (str link-href "/" page)))))
 
 ;; (defsnippet my-snip pager-html [:.pager]
 ;;   [data]
@@ -59,7 +59,10 @@
 
 (deftemplate layout layout-html [articles-type menu-items article-list]
   leftnav-sel (substitute (leftnav-snip link-snip menu-items))
-  content-sel (substitute (article-list-snip article-snip article-list)))
+  content-sel (substitute (article-list-snip article-snip article-list))
+  [:.pager]   (substitute (pager-snip (str "/articles" article-type)
+                                      (count article-list)
+                                      10)))
 
 
 
