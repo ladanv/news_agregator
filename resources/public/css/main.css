@@ -41,11 +41,6 @@
     padding: .1em 1em;
 }
 
-/* #content h2 */
-/* { */
-/*     margin: 0 0 .5em 0; */
-/* } */
-
 #footer
 {
     clear: both;
@@ -57,10 +52,22 @@
     text-align: center;
 }
 
-.paging
+.pager
 {
     margin-left: 200px;
     border-left: 1px solid gray;
     padding: .1em 1em;
     text-align: center;
+}
+
+.pager .pages a
+{
+   padding: .3em; 
+}
+
+.pager .pages .curr-page
+{
+   text-decoration: none; 
+   color: #000000;
+   font-weight: bold;
 }

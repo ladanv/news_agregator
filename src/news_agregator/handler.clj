@@ -2,6 +2,7 @@
   (:require [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
+            [clojure.contrib.math :as math]
             [net.cgrand.enlive-html :as html]
             [ring.util.response :as resp]
             (news_agregator [utils :as utils]
@@ -78,11 +79,19 @@
       (* page limit)))
 
 (defn layout-page [articles-type page-num]
-  (let [limit  articles-per-page
-        offset (calc-offset (Integer. page-num) limit)]
-        (if (= articles-type "all")
-          (view/layout articles-type menu-items (model/get-articles limit offset))
-          (view/layout articles-type menu-items (model/get-articles articles-type limit offset)))))
+  (let [page (Integer. page-num)
+        limit  articles-per-page
+        offset (calc-offset page limit)
+        pages-count (-> (model/get-articles articles-type)
+                        count
+                        (/ articles-per-page)
+                        math/ceil
+                        int)]
+    (view/layout menu-items
+                 articles-type
+                 (model/get-articles articles-type limit offset)
+                 page
+                 pages-count)))
 
 (defroutes app-routes
   (GET "/" [] (resp/redirect "/articles/all/1"))
@@ -91,5 +100,5 @@
   (route/not-found "Not Found"))
 
 (def app
-  (do ;(run-articles-fetching)
+  (do (run-articles-fetching)
       (handler/site app-routes)))

@@ -1,5 +1,6 @@
 (ns news_agregator.view
-  (:require [net.cgrand.enlive-html :refer :all]))
+  (:require [net.cgrand.enlive-html :refer :all]
+            [clojure.contrib.math :as math]))
 
 ;; pages
 
@@ -36,33 +37,49 @@
   [model data]
   content-sel (content (map model data)))
 
- ;; TODO stoped here
 (defsnippet pager-snip pager-html [:.pager]
   [link-href curr-page count limit] 
-  ;; [:.prev-page] (do->
-  ;;                (if (= curr-page 1)))
-  ;; [:.next-page] ()
-  [:.page-link] (clone-for [page (range count)]
-                           [:a] (do->
-                                 (content (str page))
-                                 (set-attr :href (str link-href "/" page)))))
-
-;; (defsnippet my-snip pager-html [:.pager]
-;;   [data]
-;;   [:.pages :a] (clone-for [item (range 3 13)]
-;;                           [:a] (do->
-;;                                 (content (str item))
-;;                                 (set-attr :href (str item)))))
-;; (print (my-snip my-data))
+  [:.prev-page] (do-> (if (= curr-page 1)
+                        (content "")
+                        (set-attr :href (str link-href "/" (- curr-page 1)))))
+  [:.next-page] (do-> (if (= curr-page (max count limit))
+                        (content "")
+                        (set-attr :href (str link-href "/" (+ curr-page 1)))))
+  [:.page] (let [pages-limit (min count limit)
+                 half-limit (-> pages-limit
+                                (/ 2)
+                                math/ceil
+                                int)
+                 left-offset1 (- curr-page half-limit)
+                 left-offset2 (+ (- count pages-limit) 1)
+                 left-offset (min left-offset1 left-offset2)
+                 begin (max 1 left-offset)
+                 end (+ begin pages-limit)]
+             (clone-for [page (range begin end)]
+                        [:a] (do->
+                              (content (str page))
+                              (if (= curr-page page)
+                                (set-attr :href "")
+                                (set-attr :href (str link-href "/" page)))
+                              (set-attr :class (if (= curr-page page)
+                                                 "curr-page"
+                                                 "page"))))))
 
 ;; templates
 
-(deftemplate layout layout-html [articles-type menu-items article-list]
+(def pages-limit 10)
+
+(deftemplate layout layout-html [menu-items
+                                 articles-type
+                                 articles-list
+                                 curr-page
+                                 pages-count]
   leftnav-sel (substitute (leftnav-snip link-snip menu-items))
-  content-sel (substitute (article-list-snip article-snip article-list))
-  [:.pager]   (substitute (pager-snip (str "/articles" article-type)
-                                      (count article-list)
-                                      10)))
+  content-sel (substitute (article-list-snip article-snip articles-list))
+  [:.pager]   (substitute (pager-snip (str "/articles/" articles-type)
+                                      curr-page
+                                      pages-count
+                                      pages-limit)))
 
 
 

@@ -22,17 +22,21 @@
   ([] 
      (select articles))
   ([article-type]
+     (if (= article-type "all")
+       (get-articles)
        (select articles
-               (where {:type article-type})))
+               (where {:type article-type}))))
   ([limit-num offset-num]
      (select articles
              (limit limit-num)
              (offset offset-num)))
   ([article-type limit-num offset-num]
-     (select articles
-             (where {:type article-type})
-             (limit limit-num)
-             (offset offset-num))))
+     (if (= article-type "all")
+       (get-articles limit-num offset-num)
+       (select articles
+               (where {:type article-type})
+               (limit limit-num)
+               (offset offset-num)))))
 
 (first (get-articles "all"))
 
