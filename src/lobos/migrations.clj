@@ -1,8 +1,14 @@
 (ns lobos.migrations
   (:refer-clojure :exclude [alter drop
                             bigint boolean char double float time])
-  (:use (lobos [migration :only [defmigration]] core schema
-               config helpers)))
+  ;; (:use (lobos [migration :only [defmigration]] core schema
+  ;;              config helpers))
+  (:require (lobos [migration :refer [defmigration]]
+                   [core :refer :all]
+                   [schema :refer :all]
+                   [config :refer :all]
+                   [helpers :refer :all]))
+  )
 
 (defmigration add-articles-table
   (up []
