@@ -7,6 +7,7 @@
                  [enlive "1.1.1"]
                  [korma "0.3.0-RC5"]
                  [postgresql/postgresql "9.1-901.jdbc4"]
+                 [lobos "1.0.0-beta1"]
                  [overtone/at-at "1.1.1"]]
   :plugins [[lein-ring "0.8.3"]]
   :ring {:handler news_agregator.handler/app}

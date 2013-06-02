@@ -1,16 +1,18 @@
 (ns news_agregator.model
-  (:use [korma db core]))
+  (:require (korma [db :refer :all]
+                   [core :refer :all])
+            news_agregator.db))
 
-(def default-conn {:classname "com.postgresql.jdbc.Driver"
-                   :subprotocol "postgresql"
-                   :user "user"
-                   :password "yes"
-                   :subname "//127.0.0.1:5740/news_agregator"
-                   :delimiters "`"})
+;; (def default-conn {:classname "com.postgresql.jdbc.Driver"
+;;                    :subprotocol "postgresql"
+;;                    :user "user"
+;;                    :password "yes"
+;;                    :subname "//127.0.0.1:5740/news_agregator"
+;;                    :delimiters "`"})
 
-(defdb db (postgres {:db "news_agregator"
-                     :user "user"
-                     :password "yes"}))
+;; (defdb db (postgres {:db "news_agregator"
+;;                      :user "user"
+;;                      :password "yes"}))
 
 ; articles
 
