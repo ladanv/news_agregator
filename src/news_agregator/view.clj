@@ -42,7 +42,7 @@
   [:.prev-page] (do-> (if (= curr-page 1)
                         (content "")
                         (set-attr :href (str link-href "/" (- curr-page 1)))))
-  [:.next-page] (do-> (if (= curr-page (max count limit))
+  [:.next-page] (do-> (if (= curr-page count)
                         (content "")
                         (set-attr :href (str link-href "/" (+ curr-page 1)))))
   [:.page] (let [pages-limit (min count limit)
@@ -59,11 +59,10 @@
                         [:a] (do->
                               (content (str page))
                               (if (= curr-page page)
-                                (set-attr :href "")
-                                (set-attr :href (str link-href "/" page)))
-                              (set-attr :class (if (= curr-page page)
-                                                 "curr-page"
-                                                 "page"))))))
+                                (do (set-attr :href "")
+                                    (set-attr :class "curr-page"))
+                                (do (set-attr :href (str link-href "/" page))
+                                    (set-attr :class "page")))))))
 
 ;; templates
 
