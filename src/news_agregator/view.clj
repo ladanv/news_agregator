@@ -58,11 +58,12 @@
              (clone-for [page (range begin end)]
                         [:a] (do->
                               (content (str page))
-                              (if (= curr-page page)
-                                (do (set-attr :href "")
-                                    (set-attr :class "curr-page"))
-                                (do (set-attr :href (str link-href "/" page))
-                                    (set-attr :class "page")))))))
+                              (set-attr :href (if (= curr-page page)
+                                                ""
+                                                (str link-href "/" page)))
+                              (set-attr :class (if (= curr-page page)
+                                                 "curr-page"
+                                                 "page"))))))
 
 ;; templates
 
