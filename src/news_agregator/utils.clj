@@ -8,10 +8,19 @@
       .getContent
       (java.io.InputStreamReader. encoding-system)))
 
+;; http://www.mail-archive.com/clojure@googlegroups.com/msg67221.html
+;; (def user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172")
+
+;; (defn open-connection [url]
+;;   (doto (.openConnection url)
+;;         (.setRequestProperty "User-Agent" user-agent)))
+
 (defn fetch-url [url encoding-system]
   (html/html-resource (-> url
                           java.net.URL.
-                          (encode-string encoding-system))))
+                          ;; open-connection
+                          (encode-string encoding-system)
+                          )))
 
 (defn remove-from-start [s sub]
   (let [pos (.indexOf s sub)]
