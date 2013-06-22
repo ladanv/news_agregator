@@ -60,6 +60,16 @@
     text-align: center;
 }
 
+.pager .prev-page
+{
+   padding-right: .5em; 
+}
+
+.pager .next-page  
+{
+   padding-left: .5em; 
+}
+
 .pager .pages a
 {
    padding: .3em; 

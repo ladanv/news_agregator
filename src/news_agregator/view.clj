@@ -2,50 +2,46 @@
   (:require [hiccup.core :refer :all]
             [clojure.contrib.math :as math]))
 
-;; (defsnippet pager-snip pager-html [:.pager]
-;;   [link-href curr-page count limit] 
-;;   [:.prev-page] (do-> (if (= curr-page 1)
-;;                         (content "")
-;;                         (set-attr :href (str link-href "/" (- curr-page 1)))))
-;;   [:.next-page] (do-> (if (= curr-page count)
-;;                         (content "")
-;;                         (set-attr :href (str link-href "/" (+ curr-page 1)))))
-;;   [:.page] (let [pages-limit (min count limit)
-;;                  half-limit (-> pages-limit
-;;                                 (/ 2)
-;;                                 math/ceil
-;;                                 int)
-;;                  left-offset1 (- curr-page half-limit)
-;;                  left-offset2 (+ (- count pages-limit) 1)
-;;                  left-offset (min left-offset1 left-offset2)
-;;                  begin (max 1 left-offset)
-;;                  end (+ begin pages-limit)]
-;;              (clone-for [page (range begin end)]
-;;                         [:a] (do->
-;;                               (content (str page))
-;;                               (set-attr :href (if (= curr-page page)
-;;                                                 ""
-;;                                                 (str link-href "/" page)))
-;;                               (set-attr :class (if (= curr-page page)
-;;                                                  "curr-page"
-;;                                                  "page"))))))
-
 (def pages-limit 10)
 
 (def header "Агрегатор новостей")
 
 (defn leftnav [menu-items]
   [:div#leftnav
-   (for [item menu-items]
-     (let [href (:href item)
-           text (:text item)]
-       [:p [:a {:href href} text]]))])
+   (for [{:keys [href text]} menu-items]
+     [:p [:a {:href href} text]])])
 
 (defn pager [link-href
              curr-page
-             pages-count
-             pages-limit]
-  [:div#pager])
+             count
+             limit]
+  [:div.pager
+   (if-not (= curr-page 1)
+     [:a.prev-page {:href (str link-href "/" (- curr-page 1))} "Предыдущая"])
+   (if-not (= curr-page count)
+     [:a.next-page {:href (str link-href "/" (+ curr-page 1))} "Следующая"])
+   [:div.pages
+    (let [pages-limit (min count limit)
+          half-limit (-> pages-limit
+                         (/ 2)
+                         math/ceil
+                         int)
+          left-offset1 (- curr-page half-limit)
+          left-offset2 (+ (- count pages-limit) 1)
+          left-offset (min left-offset1 left-offset2)
+          begin (max 1 left-offset)
+          end (+ begin pages-limit)]
+      (for [page (range begin end)]
+        (if (= curr-page page)
+          [:a.curr-page page]
+          [:a.page {:href (str link-href "/" page)} page])))]])
+
+(defn articles [articles-list]
+  [:div#content
+   (for [{:keys [headline link summary]} articles-list]
+     [:div.article
+      [:h2 [:a {:href link :target "newtab"} headline]]
+      [:p summary]])])
 
 (defn layout [menu-items
              articles-type
@@ -64,6 +60,6 @@
               [:h1 header]]
              (leftnav menu-items)
              (pager link-href curr-page pages-count pages-limit)
-             [:div#content]
+             (articles articles-list)
              (pager link-href curr-page pages-count pages-limit)
              [:div#footer "Copyright © 2013 - Vitaliy Ladan"]]]])))
